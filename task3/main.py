@@ -40,7 +40,31 @@ def task(csvString):
     indirectly_subordinate = list(map(int, set(indirectly_subordinate)))
     indirectly_subordinate.sort()
 
-    print([direct_controler, direct_subordinate, indirectly_controler, indirectly_subordinate, subordination])
+    subordination = []
+
+    max_node = -1
+    for i in struct:
+        if max_node < max(*map(int,i)):
+            max_node = max(*map(int,i))
+
+    depths = [-1 for _ in range(max_node)]
+
+    depths[0] = 0
+    for i in range(max_node):
+        for j in struct:
+            if int(j[0]) - 1 != i:
+                continue
+            depths[int(j[1]) - 1] = depths[int(j[0]) - 1] + 1
+
+    for i in range(max_node):
+        for j in range(max_node):
+            if depths[i] == depths[j] and i != j:
+                subordination.append(i + 1)
+                subordination.append(j + 1)
+
+    subordination = list(map(int, set(subordination)))
+    subordination.sort()
+
     return [direct_controler, direct_subordinate, indirectly_controler, indirectly_subordinate, subordination]
 
 reference = [[1,3],[2,3,4,5],[1],[4,5],[2,3,4,5]]
